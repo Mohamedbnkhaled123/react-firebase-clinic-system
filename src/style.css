@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+/* Tailwind CSS v4 theme configuration */
+@theme {
+  --color-primary: #3A6FF7;
+  --color-accent: #2F5DD3;
+  --color-accent-hover: #274FAF;
+  --color-accent-active: #1e3a8a;
+  --color-soft-bg: #AFC3FF;
+  --color-text-light: #F6FAFF;
+
+  --font-sans: 'Cairo', sans-serif;
+  --font-serif: 'Tajawal', sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: #1e293b;
+    /* slate-800 */
+    background-color: white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+  }
+}

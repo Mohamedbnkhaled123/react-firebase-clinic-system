@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/src/assets/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة تحكم المسؤول - عيادة باريس</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+    <div id="app">
+        <!-- Header -->
+        <header class="bg-white shadow-sm z-50">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <img src="/src/assets/logo.png" alt="شعار عيادة باريس" class="h-10 w-auto" />
+                    <span class="font-bold text-lg text-slate-700">لوحة التحكم</span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <span id="notification-badge"
+                            class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                        <button class="text-slate-500 hover:text-primary transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                    <button id="logout-btn"
+                        class="text-slate-500 hover:text-red-500 font-medium transition-colors flex items-center gap-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                            </path>
+                        </svg>
+                        خروج
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-6 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-bold text-slate-900">الحجوزات</h1>
+                <div class="flex gap-3">
+                    <select id="status-filter"
+                        class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-sm focus:border-primary outline-none">
+                        <option value="all">جميع الحالات</option>
+                        <option value="pending">قيد الانتظار</option>
+                        <option value="confirmed">مؤكد</option>
+                        <option value="completed">مكتمل</option>
+                        <option value="cancelled">ملغى</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-slate-500 text-sm mb-1">إجمالي الحجوزات</div>
+                    <div class="text-2xl font-bold text-slate-900" id="total-bookings">0
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-slate-500 text-sm mb-1">قيد الانتظار</div>
+                    <div class="text-2xl font-bold text-yellow-600" id="pending-bookings">0
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-slate-500 text-sm mb-1">مؤكدة</div>
+                    <div class="text-2xl font-bold text-green-600" id="confirmed-bookings">0
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-slate-500 text-sm mb-1">اليوم</div>
+                    <div class="text-2xl font-bold text-primary" id="today-bookings">0</div>
+                </div>
+            </div>
+
+            <!-- Bookings Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right">
+                        <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 text-sm">
+                            <tr>
+                                <th class="px-6 py-4 font-medium">المريض</th>
+                                <th class="px-6 py-4 font-medium">الخدمة</th>
+                                <th class="px-6 py-4 font-medium">التاريخ</th>
+                                <th class="px-6 py-4 font-medium">الحالة</th>
+                                <th class="px-6 py-4 font-medium">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table-body" class="divide-y divide-slate-100">
+                            <!-- Rows will be populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="empty-state" class="hidden p-12 text-center text-slate-500">
+                    <svg class="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                        </path>
+                    </svg>
+                    <p>لا توجد حجوزات حتى الآن</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="/src/admin.ts"></script>
+    <!-- Global Custom Modal -->
+    <div id="global-modal"
+        class="fixed inset-0 bg-black/50 z-[70] hidden flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div
+            class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transform transition-all scale-95 duration-300 text-center">
+            <div class="mb-4 text-primary flex justify-center">
+                <!-- Icon injected by JS -->
+                <div id="modal-icon"></div>
+            </div>
+            <h3 id="modal-title" class="text-xl font-bold text-slate-900 mb-2"></h3>
+            <p id="modal-message" class="text-slate-600 mb-8"></p>
+
+            <div id="modal-actions" class="flex justify-center gap-4">
+                <!-- Buttons injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Accessibility Announcer -->
+    <div id="a11y-announcer" class="sr-only" role="status" aria-live="polite"></div>
+
+</body>
+
+</html>
